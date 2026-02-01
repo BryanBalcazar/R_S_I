@@ -1,25 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <record id="view_suscripcion_tree" model="ir.ui.view">
+            <field name="name">modulo_isp.suscripcion.tree</field>
+            <field name="model">modulo_isp.suscripcion</field>
+            <field name="arch" type="xml">
+                <list decoration-info="estado == 'activo'" decoration-danger="estado == 'suspendido'">
+                    <field name="name"/>
+                    <field name="cliente_id"/>
+                    <field name="plan_id"/>
+                    <field name="termino_pago_id"/>
+                    <field name="estado" widget="badge"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_suscripcion_form" model="ir.ui.view">
+            <field name="name">modulo_isp.suscripcion.form</field>
+            <field name="model">modulo_isp.suscripcion</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_crear_factura" string="Generar Factura" type="object" class="oe_highlight" invisible="estado != 'borrador'"/>
+                        <field name="estado" widget="statusbar" statusbar_visible="borrador,activo,suspendido"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name"/></h1>
+                        </div>
+                        <group>
+                            <group string="Información del Cliente">
+                                <field name="cliente_id"/>
+                                <field name="fecha_inicio"/>
+                            </group>
+                            <group string="Detalles del Servicio">
+                                <field name="plan_id"/>
+                                <field name="termino_pago_id"/>
+                                <field name="factura_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
         <record id="action_modulo_isp_suscripcion" model="ir.actions.act_window">
             <field name="name">Suscripciones ISP</field>
             <field name="res_model">modulo_isp.suscripcion</field>
             <field name="view_mode">list,form</field>
         </record>
 
-        <menuitem id="menu_modulo_isp_root" 
-                  name="Servicios ISP" 
-                  sequence="10"/>
-
-        <menuitem id="menu_modulo_isp_config" 
-                  name="Operaciones" 
-                  parent="menu_modulo_isp_root" 
-                  sequence="10"/>
-
-        <menuitem id="menu_suscripcion_item" 
-                  name="Suscripciones de Clientes" 
-                  parent="menu_modulo_isp_config" 
-                  action="action_modulo_isp_suscripcion" 
-                  sequence="10"/>
+        <menuitem id="menu_modulo_isp_root" name="Servicios ISP" sequence="10"/>
+        <menuitem id="menu_modulo_isp_config" name="Operaciones" parent="menu_modulo_isp_root" sequence="10"/>
+        <menuitem id="menu_suscripcion_item" name="Suscripciones" parent="menu_modulo_isp_config" action="action_modulo_isp_suscripcion" sequence="10"/>
     </data>
 </odoo>
