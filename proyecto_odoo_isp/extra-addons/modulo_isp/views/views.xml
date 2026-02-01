@@ -9,7 +9,7 @@
                     <field name="name"/>
                     <field name="cliente_id"/>
                     <field name="plan_id"/>
-                    <field name="termino_pago_id"/>
+                    <field name="tipo_servicio"/> <field name="termino_pago_id"/>
                     <field name="estado" widget="badge"/>
                 </list>
             </field>
@@ -35,8 +35,9 @@
                             </group>
                             <group string="Detalles del Servicio">
                                 <field name="plan_id"/>
+                                <field name="tipo_servicio" readonly="1" force_save="1"/>
                                 <field name="termino_pago_id"/>
-                                <field name="factura_id"/>
+                                <field name="factura_id" invisible="not factura_id"/>
                             </group>
                         </group>
                     </sheet>
