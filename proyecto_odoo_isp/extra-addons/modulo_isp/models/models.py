@@ -10,8 +10,8 @@ class SuscripcionISP(models.Model):
     cliente_id = fields.Many2one('res.partner', string='Cliente', required=True)
     plan_id = fields.Many2one('product.product', string='Plan/Variante', domain=[('type', '=', 'service')], required=True)
     
-    # Corregido: Ahora es un campo Char para evitar el TypeError
-    tipo_servicio = fields.Char(string='Tecnología', compute="_compute_tecnologia", store=True)
+    # CAMBIO CLAVE: Cambiamos el nombre a 'tipo_tecnologia' para resetear el error de la base de datos
+    tipo_tecnologia = fields.Char(string='Tecnología', compute="_compute_tecnologia", store=True)
     
     termino_pago_id = fields.Many2one('account.payment.term', string='Plan de Pago', required=True)
     factura_id = fields.Many2one('account.move', string='Última Factura', readonly=True)
@@ -29,10 +29,11 @@ class SuscripcionISP(models.Model):
     @api.depends('plan_id')
     def _compute_tecnologia(self):
         for rec in self:
+            # Buscamos si el producto tiene atributos (ej. Tecnología: Fibra)
             if rec.plan_id and rec.plan_id.attribute_line_ids:
-                rec.tipo_servicio = rec.plan_id.attribute_line_ids[0].attribute_id.name
+                rec.tipo_tecnologia = rec.plan_id.attribute_line_ids[0].attribute_id.name
             else:
-                rec.tipo_servicio = 'Fibra Óptica'
+                rec.tipo_tecnologia = 'Servicio Digital'
 
     @api.model
     def create(self, vals):
