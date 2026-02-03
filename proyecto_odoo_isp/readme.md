@@ -1,33 +1,21 @@
-🚀 Guía de Despliegue: Proyecto RSI (Odoo ISP)
-Sigue estos pasos en orden para levantar el proyecto con toda la configuración, logos, planes y roles de usuario.
+4. El "Script Maestro" para tu compañero (con tu configuración)
+Dile a tu compañero que, una vez descargue todo, ejecute estos comandos exactos:
 
-1. Preparación
-Asegúrate de tener instalado Docker y Docker Desktop abierto. Descomprime la carpeta del proyecto y abre una terminal dentro de ella.
-
-2. Levantar el Servidor
-Este comando descarga las imágenes necesarias y enciende los motores de Odoo y la Base de Datos.
+Paso 1: Encender (Crea la base de datos vacía)
 
 Bash
 docker-compose up -d
-Espera unos 10 segundos a que los servicios se estabilicen.
-
-3. Cargar la Base de Datos (Backup de 51MB)
-Este es el paso clave para que te aparezca todo lo que yo hice (Logo de RSI, planes, eCommerce y roles).
+Paso 2: Restaurar los datos (SQL)
 
 Bash
-docker exec -i proyecto_odoo_isp_db_1 psql -U odoo -d postgres < backup_rsi.sql
-Nota: Si la terminal vuelve a la línea de comandos sin errores, la carga fue exitosa.
+cat backup_actualizado_isp.sql | docker exec -i $(docker ps -qf "name=db") psql -U odoo
+Paso 3: Actualizar el módulo para que reconozca los cambios
 
-4. Reiniciar para Aplicar Cambios
-Reiniciamos los contenedores para que Odoo reconozca la nueva base de datos inyectada.
+Bash
+docker exec -u 0 $(docker ps -qf "name=web") odoo -u modulo_isp -d postgres --stop-after-init
+Paso 4: Reiniciar
 
 Bash
 docker-compose restart
-5. Acceso al Sistema
-Abre tu navegador y entra a la siguiente dirección:
 
-URL: http://localhost:8069
-
-Base de Datos: Selecciona postgres (si te lo pregunta).
-
-Credenciales: Usa mi correo y mi contraseña (los mismos que usamos en el laboratorio).
+entrar al localhost:8069 y ver si funciona todo

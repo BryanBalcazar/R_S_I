@@ -15,7 +15,8 @@ services:
     ports:
       - "8069:8069"
     volumes:
-      - odoo-web-data:/var/lib/odoo
+      # - odoo-web-data:/var/lib/odoo
+      - ./filestore:/var/lib/odoo/filestore
       - ./extra-addons:/mnt/extra-addons
     environment:
       - HOST=db
